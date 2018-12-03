@@ -19,9 +19,6 @@ fun <T> Sequence<T>.looping() =
 
 fun <T> Sequence<T>.pairPermutations() =
         flatMap { first -> map { second -> first to second } }
-                .toSet()
 
 fun <T> Sequence<T>.pairCombinations() =
-        mapIndexed { i, first -> drop(i + 1).map { second -> first to second } }
-                .flatMap { it }
-                .toSet()
+        mapIndexed { i, first -> drop(i + 1).map { second -> first to second } }.flatMap { it }
