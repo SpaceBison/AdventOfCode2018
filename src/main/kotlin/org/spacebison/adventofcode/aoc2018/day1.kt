@@ -20,14 +20,4 @@ object Day1 {
                 .map { partialSum += it; partialSum }
                 .first { !visitedSums.add(partialSum) }
     }
-
-    private fun getNumberSequence(input: String): Sequence<Int> {
-        return input.split(Regex("[\\s,]"))
-                .asSequence()
-                .filter { it.isNotEmpty() }
-                .map { Integer.parseInt(it) }
-    }
-
-    private fun <T> Sequence<T>.looping() =
-            generateSequence { this }.flatMap { it }
 }
