@@ -3,6 +3,7 @@ package org.spacebison.adventofcode.aoc2018
 import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.equalTo
 import org.junit.Test
+import java.awt.Rectangle
 
 internal class CommonKtTest {
 
@@ -10,7 +11,7 @@ internal class CommonKtTest {
     fun pairPermutations() {
         val sequence = sequenceOf(1, 2, 3)
 
-        val pairPermutations = sequence.pairPermutations()
+        val pairPermutations = sequence.pairPermutations().toSet()
         val expected = setOf(
                 1 to 1, 1 to 2, 1 to 3,
                 2 to 1, 2 to 2, 2 to 3,
@@ -30,5 +31,15 @@ internal class CommonKtTest {
                 setOf(3, 4))
 
         assert.that(pairCombinations, equalTo(expected))
+    }
+
+    @Test
+    fun testRectangleSubtract() {
+        val rect1 = Rectangle(0, 0, 2, 2)
+        val rect2 = Rectangle(0, 1, 2, 2)
+        val rect3 = Rectangle(1, 0, 2, 2)
+
+        assert.that(rect1.subtract(rect2), equalTo(Rectangle(0, 0, 2, 1)))
+        assert.that(rect1.subtract(rect3), equalTo(Rectangle(0, 0, 1, 2)))
     }
 }
