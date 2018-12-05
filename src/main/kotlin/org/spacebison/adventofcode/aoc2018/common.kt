@@ -22,3 +22,7 @@ fun <T> Sequence<T>.pairPermutations() =
 
 fun <T> Sequence<T>.pairCombinations() =
         mapIndexed { i, first -> drop(i + 1).map { second -> first to second } }.flatMap { it }
+
+fun <T> Iterable<T>.pairPermutations() = asSequence().pairPermutations().asIterable()
+
+fun <T> Iterable<T>.pairCombinations() = asSequence().pairCombinations().asIterable()

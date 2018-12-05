@@ -10,7 +10,7 @@ internal class CommonKtTest {
     fun pairPermutations() {
         val sequence = sequenceOf(1, 2, 3)
 
-        val pairPermutations = sequence.pairPermutations()
+        val pairPermutations = sequence.pairPermutations().toSet()
         val expected = setOf(
                 1 to 1, 1 to 2, 1 to 3,
                 2 to 1, 2 to 2, 2 to 3,
