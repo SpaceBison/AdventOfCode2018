@@ -46,5 +46,16 @@ object Day3 {
                 .sum()
     }
 
-    fun part2(input: String) {}
+    fun part2(input: String): Int {
+        data class Claim(val id: Int, val rectangle: Rectangle)
+
+        // parse rectangles
+        val rectangles = input.lineSequence()
+                .map { it.split('@', '#', ' ', 'x', ':', ',').filter { it.isNotBlank() }.map { it.toInt() } }
+                .distinct()
+                .map { Claim(it[0], Rectangle(it[1], it[2], it[3], it[4])) }
+                .toSet()
+
+        return rectangles.first { rect -> rectangles.minus(rect).none { rect.rectangle.intersects(it.rectangle) } }.id
+    }
 }
