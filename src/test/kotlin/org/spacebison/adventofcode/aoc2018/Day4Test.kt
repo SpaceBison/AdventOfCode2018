@@ -5,10 +5,7 @@ import com.natpryce.hamkrest.assertion.assert
 import com.natpryce.hamkrest.equalTo
 
 internal class Day4Test {
-
-    @Test
-    fun part1() {
-        val input = """
+    val input = """
             [1518-11-01 00:00] Guard #10 begins shift
             [1518-11-01 00:05] falls asleep
             [1518-11-01 00:25] wakes up
@@ -28,6 +25,8 @@ internal class Day4Test {
             [1518-11-05 00:55] wakes up
         """.trimIndent()
 
+    @Test
+    fun part1() {
         val result = Day4.part1(input)
 
         assert.that(result, equalTo(240L))
@@ -35,5 +34,8 @@ internal class Day4Test {
 
     @Test
     fun part2() {
+        val result = Day4.part2(input)
+
+        assert.that(result, equalTo(4455L))
     }
 }

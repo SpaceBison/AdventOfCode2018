@@ -23,6 +23,45 @@ object Day4 {
     data class Shift(val guardId: Int, val start: LocalDateTime, val sleeps: List<Sleep>)
 
     fun part1(input: String): Long {
+        val shifts = parseRecord(input)
+
+        val shiftsByGuard = shifts.groupBy { it.guardId }
+                .mapValues { it.value.flatMap { it.sleeps } }
+
+        val mostSleepyGuard = shiftsByGuard
+                .mapValues { it.value.map { Duration.between(it.start, it.end).toMinutes() }.sum() }
+                .maxBy { it.value }!!
+                .key
+
+        val mostSleepyMinute = shiftsByGuard[mostSleepyGuard]
+                ?.flatMap { (it.start.minute until it.end.minute) }
+                ?.groupBy { it }
+                ?.values
+                ?.maxBy { it.size }
+                ?.first()
+
+        return mostSleepyGuard.toLong() * mostSleepyMinute!!
+    }
+
+    fun part2(input: String): Long {
+        val shifts = parseRecord(input)
+
+        val shiftsByGuard = shifts.groupBy { it.guardId }
+                .mapValues { it.value.flatMap { it.sleeps } }
+
+        val (mostFrequentMinute, mostFrequentSleeper) = shiftsByGuard
+                .mapValues { it.value.flatMap { it.start.minute until it.end.minute } }
+                .flatMap { entry -> entry.value.map { it to entry.key } }
+                .groupBy { it.first to it.second }
+                .mapValues { it.value.count() }
+                .maxBy { it.value }!!
+                .key
+
+
+        return mostFrequentMinute.toLong() * mostFrequentSleeper
+    }
+
+    private fun parseRecord(input: String): LinkedList<Shift> {
         val record = input.lineSequence()
                 .associate { it.substring(1..16) to it.substring(19) }
                 .mapKeys { LocalDateTime.parse(it.key, timeParser) }
@@ -50,26 +89,8 @@ object Day4 {
             }
         }
 
-        println(shifts.joinToString(separator = "\n"))
+        shifts.add(Shift(currentGuard!!, currentShiftStart, currentSleeps.toList()))
 
-        val shiftsByGuard = shifts.groupBy { it.guardId }
-                .mapValues { it.value.flatMap { it.sleeps } }
-
-        val (mostSleepyGuard, minutesSlept) = shiftsByGuard
-                .mapValues { it.value.map { Duration.between(it.start, it.end).toMinutes() }.sum() }
-                .onEach { println(it) }
-                .maxBy { it.value }!!
-                .run { key to value }
-
-        val mostSleepyMinute = shiftsByGuard[mostSleepyGuard]
-                ?.flatMap { (it.start.minute..it.end.minute) }
-                ?.groupBy { it }
-                ?.values
-                ?.maxBy { it.size }
-                ?.first()
-
-        return mostSleepyGuard.toLong() * mostSleepyMinute!!
+        return shifts
     }
-
-    fun part2(input: String) {}
 }
