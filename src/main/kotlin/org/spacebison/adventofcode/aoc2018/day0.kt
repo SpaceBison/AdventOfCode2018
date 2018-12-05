@@ -1,5 +1,7 @@
 package org.spacebison.adventofcode.aoc2018
 
+import org.spacebison.adventofcode.aoc2018.common.getInputForDay
+
 fun main(args: Array<String>) {
     val input = getInputForDay(0)
     println(Day0.part1(input))

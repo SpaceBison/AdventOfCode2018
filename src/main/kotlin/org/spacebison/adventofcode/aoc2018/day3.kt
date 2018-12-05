@@ -1,6 +1,10 @@
 package org.spacebison.adventofcode.aoc2018
 
+import org.spacebison.adventofcode.aoc2018.common.getInputForDay
+import org.spacebison.adventofcode.aoc2018.common.pairCombinations
+import org.spacebison.adventofcode.aoc2018.common.subtract
 import java.awt.Rectangle
+import java.util.*
 
 fun main(args: Array<String>) {
     val input = getInputForDay(3)
@@ -10,30 +14,37 @@ fun main(args: Array<String>) {
 
 object Day3 {
 
-    fun part1(input: String) =
-            input.lineSequence()
-                    .map { it.split('@', '#', ' ', 'x', ':', ',').filter { it.isNotBlank() }.map { it.toInt() } }
-                    .map { Rectangle(it[1], it[2], it[3], it[4]) }
-                    .also { println("rects: ${it.count()}") }
-                    .pairCombinations()
-                    .also { println("combinations: ${it.count()}") }
-                    .asSequence()
-                    .filter { it.first.intersects(it.second) }
-                    .also { println("intersecting: ${it.count()}") }
-                    .map { it.first.intersection(it.second) }
-                    .run {
-                        val sum = map { it.width * it.height }.sum()
-                        println("sum: $sum")
-                        val intersectingSum = pairCombinations()
-                                .also { println("intersection combinations: ${it.count()}") }
-                                .asSequence()
-                                .filter { it.first.intersects(it.second) }
-                                .also { println("intersections intersecting: ${it.count()}") }
-                                .map { it.first.intersection(it.second) }
-                                .map { it.width * it.height }
-                                .sum()
-                        return@run sum - intersectingSum
+    fun part1(input: String): Int {
+        // parse rectangles
+        val rectangles = input.lineSequence()
+                .map { it.split('@', '#', ' ', 'x', ':', ',').filter { it.isNotBlank() }.map { it.toInt() } }
+                .distinct()
+                .map { Rectangle(it[1], it[2], it[3], it[4]) }
+                .toSet()
+
+        // find intersections
+        val intersections = rectangles
+                .pairCombinations()
+                .filter { it.first.intersects(it.second) }
+                .map { it.first.intersection(it.second) }
+                .toSet()
+
+        // collection of non-overlapping intersections
+        val trimmed = HashSet<Rectangle>()
+        intersections.forEach { intersection ->
+            // for each consecutive intersection subtract the area belonging to previously stored intersections
+            trimmed
+                    .fold(setOf(intersection)) { acc, rectangle ->
+                        acc.flatMap { it.subtract(rectangle).filter { it.isEmpty.not() } }.toSet()
                     }
+                    .let { trimmed.addAll(it) }
+        }
+
+        // get sum of areas
+        return trimmed
+                .map { it.width * it.height }
+                .sum()
+    }
 
     fun part2(input: String) {}
 }

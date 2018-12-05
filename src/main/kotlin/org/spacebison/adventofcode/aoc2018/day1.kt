@@ -1,5 +1,9 @@
 package org.spacebison.adventofcode.aoc2018
 
+import org.spacebison.adventofcode.aoc2018.common.getInputForDay
+import org.spacebison.adventofcode.aoc2018.common.getNumberSequence
+import org.spacebison.adventofcode.aoc2018.common.looping
+
 fun main(args: Array<String>) {
     val input = getInputForDay(1)
     println(Day1.part1(input))

@@ -1,5 +1,8 @@
 package org.spacebison.adventofcode.aoc2018
 
+import org.spacebison.adventofcode.aoc2018.common.getInputForDay
+import org.spacebison.adventofcode.aoc2018.common.pairCombinations
+
 fun main(args: Array<String>) {
     val input = getInputForDay(2)
     println(Day2.part1(input))

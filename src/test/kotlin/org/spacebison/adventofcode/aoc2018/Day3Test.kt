@@ -42,4 +42,17 @@ class Day3Test {
 
         assert.that(result, equalTo(5))
     }
+
+    @Test
+    fun testPart1Chain() {
+        val input = """
+            #1 @ 0,0: 4x4
+            #2 @ 1,1: 4x4
+            #3 @ 2,2: 4x4
+            #4 @ 3,3: 4x4""".trimIndent()
+
+        val result = Day3.part1(input)
+
+        assert.that(result, equalTo(37))
+    }
 }
