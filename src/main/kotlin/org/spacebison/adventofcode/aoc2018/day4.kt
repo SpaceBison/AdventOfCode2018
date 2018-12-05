@@ -52,12 +52,23 @@ object Day4 {
 
         println(shifts.joinToString(separator = "\n"))
 
-        return shifts.groupBy { it.guardId }
+        val shiftsByGuard = shifts.groupBy { it.guardId }
                 .mapValues { it.value.flatMap { it.sleeps } }
+
+        val (mostSleepyGuard, minutesSlept) = shiftsByGuard
                 .mapValues { it.value.map { Duration.between(it.start, it.end).toMinutes() }.sum() }
                 .onEach { println(it) }
                 .maxBy { it.value }!!
-                .let { it.key * it.value }
+                .run { key to value }
+
+        val mostSleepyMinute = shiftsByGuard[mostSleepyGuard]
+                ?.flatMap { (it.start.minute..it.end.minute) }
+                ?.groupBy { it }
+                ?.values
+                ?.maxBy { it.size }
+                ?.first()
+
+        return mostSleepyGuard.toLong() * mostSleepyMinute!!
     }
 
     fun part2(input: String) {}
