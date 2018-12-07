@@ -22,5 +22,7 @@ class Day6Test {
 
     @Test
     fun part2() {
+        val result = Day6.part2(input, 32)
+        assert.that(result, equalTo(16))
     }
 }

@@ -9,7 +9,7 @@ import kotlin.math.absoluteValue
 fun main(args: Array<String>) {
     val input = getInputForDay(6)
     println(Day6.part1(input))
-    println(Day6.part2(input))
+    println(Day6.part2(input, 10000))
 }
 
 object Day6 {
@@ -37,13 +37,20 @@ object Day6 {
         return pointCounts.filterIndexed { index, i -> !outerSeedIds.contains(index) }.max()
     }
 
+    fun part2(input: String, distanceLimit: Int): Int {
+        val seeds = parseInput(input)
+        val bbox = seeds.fold(Rectangle(seeds.first())) { rect, point -> rect.also { rect.add(point) } }
+
+        return bbox.points
+                .filter { point -> seeds.map { it.manhattanDistanceTo(point) }.sum() < distanceLimit }
+                .count()
+    }
+
     private fun parseInput(input: String) =
             input.lineSequence()
                     .map { it.split(", ") }
                     .map { Point(it[0].toInt(), it[1].toInt()) }
                     .toList()
-
-    fun part2(input: String) {}
 
     private fun Point.manhattanDistanceTo(point: Point) =
             (x - point.x).absoluteValue + (y - point.y).absoluteValue
